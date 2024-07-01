@@ -1,3 +1,5 @@
+// Calculadora de préstamos
+
 const formulario = document.querySelector("#form");
 const monto = document.querySelector("#amount");
 const cuotas = document.querySelector("#fees");
@@ -16,17 +18,14 @@ formulario.addEventListener("submit", (e) => {
     const sueldoIngresado = parseFloat(prompt("Ingresa tu sueldo mensual en USD:"));
 
     if (isNaN(montoPrestamo) || isNaN(numeroCuotas) || montoPrestamo <= 0 || numeroCuotas <= 0) {
-        // Manejo de errores: valores no válidos
         console.error("Ingresa valores válidos para el monto y las cuotas.");
         return;
     }
 
     if (sueldoIngresado >= sueldoMinimo) {
-        // Aprobación del préstamo
         const cuotaPrestamo = tasa * montoPrestamo / (1 - Math.pow(1 + tasa, -numeroCuotas));
         obtenerTotal(cuotaPrestamo, numeroCuotas);
     } else {
-        // Negación del préstamo
         console.error("El sueldo no cumple con los requisitos para aprobar el préstamo.");
         alert("Sueldo mínimo para el préstamo es USD 1,000.");
     }
@@ -50,4 +49,10 @@ const pintarPrestamo = (prestamo) => {
     cuotaFinal.textContent = `${prestamo.cuotas}`;
     intereses.textContent = `$ ${prestamo.intereses}`;
     totalADevolver.textContent = `$ ${prestamo.totalPrestamo}`;
+
+    // Agregar información adicional al usuario
+    const fechaPago = new Date();
+    fechaPago.setMonth(fechaPago.getMonth() + parseInt(cuotas.value));
+    const fechaFormateada = fechaPago.toLocaleDateString("es-CL", { year: "numeric", month: "long", day: "numeric" });
+    alert(`Fecha de pago de la última cuota: ${fechaFormateada}`);
 };
